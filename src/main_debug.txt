@@ -1,0 +1,137 @@
+/*
+ * Same program with serial messages. Rename to cpp or copy over main.
+ * @author: Ismael
+ */
+
+#include <ESP8266WiFi.h>
+#include <PubSubClient.h>
+
+/* ------------------------------- Variables ------------------------------- */
+
+// /!\ Too many constants can make the program fail with no clue about it
+
+// MQTT topics
+const char* LOG = "home/log"; // Here we will publish status updates
+const char* LIGHTS = "home/lights"; // Here we will read commands
+
+// Fill with your data
+const char* ssid = "............";
+const char* password = ".................";
+const char* mqtt_server = "................";
+const int mqtt_port = 9999;
+const char* mqtt_user = "..............";
+const char* mqtt_pass = "................";
+const int outputPin = 14; // D5 = GPIO14
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+int pinStatus = 0;
+
+// Function prototypes
+void setupWifi();
+void handler(char* topic, byte* payload, unsigned int length);
+void reconnect();
+
+/* ------------------------------- Programa ------------------------------- */
+
+void setup() {
+  pinMode(outputPin, OUTPUT);
+  digitalWrite(outputPin, LOW);
+
+  Serial.begin(115200);
+
+  setup_wifi();
+
+  client.setServer(mqtt_server, mqtt_port);
+  client.setCallback(callback);
+  reconnect();
+}
+
+void loop() {
+
+  // client.loop checks that connection is openned and keeps it open (pingReq)
+  if(!client.loop()){
+    reconnect();
+  }else{
+
+    // Here we can do logics or posting some info on MQTT
+    if(digitalRead(outputPin) != pinStatus){
+      Serial.print("Switching ligths state");
+      pinStatus = digitalRead(outputPin);
+    }
+
+  }
+}
+
+/* ------------------------------- Funciones ------------------------------- */
+
+/* Establishes wifi connection */
+void setup_wifi() {
+  delay(10);
+  Serial.println();
+  Serial.print("Establishing network connection: ");
+  Serial.println(ssid);
+
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  randomSeed(micros());
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.print("IP: ");
+  Serial.println(WiFi.localIP());
+}
+
+
+/* Connects with MQTT broker does basic configuration */
+void reconnect() {
+  while (!client.connected()) {
+    Serial.println("Connecting with MQTT...");
+
+    // identifying name, user, password
+     if (client.connect("NodeMCU", "nodemcu", "node1")) {
+      Serial.println("Broker MQTT connected");
+      digitalWrite(2, LOW);
+
+      // Post an event on 'log' topic
+      client.publish(LOG, "NodeMCU connected");
+
+      // Listen to a topic
+      client.subscribe(LIGHTS);
+
+    } else {
+      digitalWrite(2, HIGH);
+      Serial.print("Connection failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" retrying in 10 seconds...");
+      delay(10000);
+    }
+  }
+}
+
+
+/* Handles the messaged posted on subscribed topics -> check setup() */
+void callback(char* topic, byte* payload, unsigned int length){
+  Serial.print("Message received: ");
+  for (int i = 0; i < length; i++) {
+    Serial.print((char)payload[i]);
+  }
+  Serial.print(" on Topic: ");
+  Serial.println(topic);
+
+  // Update the output pin status and posting on node topic
+  if(strcmp(topic, LIGHTS) == 0)
+    if ((char)payload[0] == '0' && digitalRead(outputPin)){
+      digitalWrite(outputPin, LOW);
+      client.publish(LOG, "Turning ligths off");
+    }else if((char)payload[0] == '1' && !digitalRead(outputPin)){
+      digitalWrite(outputPin, HIGH);
+      client.publish(LOG, "Turning ligths on");
+    }
+}
