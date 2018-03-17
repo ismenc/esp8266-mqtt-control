@@ -11,8 +11,8 @@
 // /!\ Too many constants can make the program fail with no clue about it
 
 // MQTT topics
-const char* LOG = "home/log"; // Here we will publish status updates
-const char* LIGHTS = "home/lights"; // Here we will read commands
+const char* LOG = "/home/log"; // Here we will publish status updates
+const char* LIGHTS = "/home/lights"; // Here we will read commands
 
 // Fill with your data
 const char* ssid = "............";
@@ -33,7 +33,7 @@ void setupWifi();
 void handler(char* topic, byte* payload, unsigned int length);
 void reconnect();
 
-/* ------------------------------- Programa ------------------------------- */
+/* ------------------------------- Program ------------------------------- */
 
 void setup() {
   pinMode(outputPin, OUTPUT);
@@ -64,7 +64,7 @@ void loop() {
   }
 }
 
-/* ------------------------------- Funciones ------------------------------- */
+/* ------------------------------- Functions ------------------------------- */
 
 /* Establishes wifi connection */
 void setup_wifi() {
@@ -95,7 +95,7 @@ void reconnect() {
     Serial.println("Connecting with MQTT...");
 
     // identifying name, user, password
-     if (client.connect("NodeMCU", "nodemcu", "node1")) {
+     if (client.connect("NodeMCU", mqtt_user, mqtt_pass)) {
       Serial.println("Broker MQTT connected");
       digitalWrite(2, LOW);
 

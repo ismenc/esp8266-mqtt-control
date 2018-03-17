@@ -2,6 +2,7 @@
  * Made for ESP8266 ESP-12 family. Connects to MQTT broker and listen to
  * 'home/lights' topic. We should post messages starting at '1' or '0' to this
  * topic to make the esp switch the lights state.
+ * More info at: https://github.com/ismenc/esp8266-mqtt-control
  *
  * @author: Ismael
  * Made with Atom & PlatformIO
@@ -16,8 +17,8 @@
 // /!\ Too many constants can make the program fail with no clue about it
 
 // MQTT topics
-const char* LOG = "home/log"; // Here we will publish status updates
-const char* LIGHTS = "home/lights"; // Here we will read commands
+const char* LOG = "/home/log"; // Here we will publish status updates
+const char* LIGHTS = "/home/lights"; // Here we will read commands
 
 // Fill with your data
 const char* ssid = "............";
@@ -63,7 +64,7 @@ void loop() {
   }
 }
 
-/* ------------------------------- Funciones ------------------------------- */
+/* ------------------------------- Functions ------------------------------- */
 
 /* Establishes wifi connection */
 void setupWifi() {
