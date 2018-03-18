@@ -67,9 +67,9 @@ You will need:
 
 :white_check_mark: A cloud MQTT broker. (ok, take [this one](https://www.cloudmqtt.com/))
 
-For your own projects, you will need the [knolleary](https://github.com/knolleary)'s great [:books: PubSubClient library](https://github.com/knolleary/pubsubclient) wich is included under the *lib* directory. It can also be installed via `PlatformIO home` at *Atom*, `Libraries`.
+You will need the [knolleary](https://github.com/knolleary)'s great [:books: PubSubClient library](https://github.com/knolleary/pubsubclient) for your own projects wich is included under the *lib* directory. It can also be installed via `PlatformIO home` at *Atom*, `Libraries`.
 
-:rocket: After that you can just clone this repository through atom or *Git* and modify and upload the main sketch. The program the main functions of the library but you can always check [knolleary's PubSubClient documentation](https://pubsubclient.knolleary.net/api.html) for more.
+:rocket: After that you can just clone this repository through atom or *Git* and modify and upload the main sketch. The program uses the main functions of the library but you can always check [knolleary's PubSubClient documentation](https://pubsubclient.knolleary.net/api.html) for more.
 
 Finally, in case you need in depth information about hardware or library, checkout his repo [:books: PubSubClient library](https://github.com/knolleary/pubsubclient).
 
