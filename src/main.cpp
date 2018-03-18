@@ -10,7 +10,6 @@
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
-#include <time.h>
 
 /* ------------------------------- Variables ------------------------------- */
 
@@ -36,8 +35,8 @@ int pinStatus = 0;
 
 // Function prototypes
 void setupWifi();
-void handler(char* topic, byte* payload, unsigned int length);
 void reconnect();
+void handler(char* topic, byte* payload, unsigned int length);
 
 /* ------------------------------- Program ------------------------------- */
 
@@ -71,11 +70,8 @@ void setupWifi() {
   delay(10);
 
   WiFi.begin(ssid, password);
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-  }
-
+  while (WiFi.status() != WL_CONNECTED)
+    delay(300);
   randomSeed(micros());
 }
 
@@ -104,7 +100,7 @@ void reconnect() {
 void handler(char* topic, byte* payload, unsigned int length){
 
   // Update the output pin status and posting on node topic
-  if(strcmp(topic, LIGHTS) == 0)
+  if(strcmp(topic, LIGHTS) == 0)  // Validation in case we subscribe multiple topics
     if ((char)payload[0] == '0' && digitalRead(outputPin)){
       digitalWrite(outputPin, LOW);
       client.publish(LOG, "Turning ligths off");

@@ -1,15 +1,18 @@
 # ESP8266 remote controller via MQTT
 
-This program allows us to control a relay attached to an *ESP8266* (over NodeMCU board) through the MQTT protocol.
-<p align="center"><img src="https://image.ibb.co/nFUKQH/IMG_20180317_231717_1.jpg" width="300" height="296" alt=""></p>
+This program allows us to control a relay attached to an *ESP8266* (over NodeMCU board) through the MQTT protocol. With the mobile app, we can control it from anywhere.
+<p align="center">
+<img src="https://image.ibb.co/nFUKQH/IMG_20180317_231717_1.jpg" width="300" alt="">
+<img src="https://image.ibb.co/g4Ckzc/ezgif_com_optimize.gif" width="220" alt="">
+</p>
 
 - - - -
 
-# Navegación
+# Navigation
 <br>
 
 > [:octocat: GitHub Repository](https://github.com/ismenc/esp8266-mqtt-control)<br>
-> [:globe_with_meridians: Android App](https://github.com/ismenc/android-mqtt-controller)<br>
+> [:iphone: Android App](https://github.com/ismenc/android-mqtt-controller)<br>
 > [:arrow_down: Releases](https://github.com/ismenc/esp8266-mqtt-control/releases)<br>
 > [:memo: Issues](https://github.com/ismenc/esp8266-mqtt-control/issues)<br>
 
@@ -19,7 +22,7 @@ This program allows us to control a relay attached to an *ESP8266* (over NodeMCU
 # How can I collaborate?
 
 <details>
-     <summary>Instrucciones</summary>
+     <summary>Instructions</summary>
  <p>
   <!-- alternative placement of p shown above -->
 
@@ -52,16 +55,19 @@ This program allows us to control a relay attached to an *ESP8266* (over NodeMCU
 
 This application connects to a **MQTT** broker (wich you can find for free) and listens to the topic `lights` under `home` (`/home/lights`). If it receives '1' or '0' starting strings, the ESP will turn *on* or *off* a relay wich controls lights. It also publishes status info at the topic `/home/log`.
 
-I also made an *Android* app for this program at this [repository](https://github.com/ismenc/android-mqtt-controller).
+I also made a simple *Android* app for this program at this [repository](https://github.com/ismenc/android-mqtt-controller).
 
 ## 2. How to use
 
 You will need:
-1. To install *drivers* for your board depending on the system.
-2. A well installed *Atom* text-editor with [PlatformIO](https://platformio.org/) environment installed.
+:white_check_mark: To install *drivers* for your board depending on the system.
+:white_check_mark: A well installed *Atom* text-editor with [PlatformIO](https://platformio.org/platformio-ide) environment installed.
+:white_check_mark: A cloud MQTT broker. (ok, take [this one](https://www.cloudmqtt.com/))
 
-For your own projects, you will need the [PubSubClient library](https://github.com/knolleary/pubsubclient) wich is included under the *lib* directory also installable via `PlatformIO home` at *Atom*, `Libraries`.
+For your own projects, you will need the [knolleary](https://github.com/knolleary)'s great [:books: PubSubClient library](https://github.com/knolleary/pubsubclient) wich is included under the *lib* directory. It can also be installed via `PlatformIO home` at *Atom*, `Libraries`.
 
-After that you can just clone this repository through atom or *Git* and modify and upload the main sketch.
+:rocket: After that you can just clone this repository through atom or *Git* and modify and upload the main sketch. The program the main functions of the library but you can always check [knolleary's PubSubClient documentation](https://pubsubclient.knolleary.net/api.html) for more.
+
+Finally, in case you need in depth information about hardware or library, checkout his repo [:books: PubSubClient library](https://github.com/knolleary/pubsubclient).
 
 #### If you have any question -> open an [:memo: Issue](https://github.com/ismenc/esp8266-mqtt-control/issues). <br><br>
