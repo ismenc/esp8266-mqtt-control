@@ -60,8 +60,11 @@ I also made a simple *Android* app for this program at this [repository](https:/
 ## 2. How to use
 
 You will need:
+
 :white_check_mark: To install *drivers* for your board depending on the system.
+
 :white_check_mark: A well installed *Atom* text-editor with [PlatformIO](https://platformio.org/platformio-ide) environment installed.
+
 :white_check_mark: A cloud MQTT broker. (ok, take [this one](https://www.cloudmqtt.com/))
 
 For your own projects, you will need the [knolleary](https://github.com/knolleary)'s great [:books: PubSubClient library](https://github.com/knolleary/pubsubclient) wich is included under the *lib* directory. It can also be installed via `PlatformIO home` at *Atom*, `Libraries`.
