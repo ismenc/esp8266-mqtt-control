@@ -10,6 +10,9 @@
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include <string>
+#include <time.h>
+#include <ESP8266HTTPClient.h>
 
 /* ------------------------------- Variables ------------------------------- */
 
@@ -37,6 +40,7 @@ int pinStatus = 0;
 void setupWifi();
 void reconnect();
 void handler(char* topic, byte* payload, unsigned int length);
+void getTime(/*char* time*/);
 
 /* ------------------------------- Program ------------------------------- */
 
@@ -82,7 +86,6 @@ void reconnect() {
 
     // identifying name, user, password
      if (client.connect("NodeMCU", mqtt_user, mqtt_pass)) {
-
       // Post an event on 'log' topic
       client.publish(LOG, "NodeMCU connected");
 
@@ -104,8 +107,32 @@ void handler(char* topic, byte* payload, unsigned int length){
     if ((char)payload[0] == '0' && digitalRead(outputPin)){
       digitalWrite(outputPin, LOW);
       client.publish(LOG, "Turning ligths off");
+      getTime();
     }else if((char)payload[0] == '1' && !digitalRead(outputPin)){
       digitalWrite(outputPin, HIGH);
       client.publish(LOG, "Turning ligths on");
     }
+}
+
+
+/* Gets the current time by http */
+void getTime(char* ret){
+  HTTPClient timeClient;
+  timeClient.begin("http://www.convert-unix-time.com/api?timestamp=now&timezone=Madrid&returnType=rss");
+  int httpCode = timeClient.GET();
+
+        if(httpCode > 0) {
+            if(httpCode == HTTP_CODE_OK) {
+                String payload = timeClient.getString();
+
+                char times[95];
+                strncpy(times, payload.c_str(), sizeof(times));
+                memcpy(times, &times[80], 10 );
+                times[10] = 0;
+                time_t epch = atoi(times);
+
+                //client.publish(LOG, asctime(gmtime(&epch)));
+            }
+        } else
+          client.publish(LOG, "Error while getting time from API.");
 }
