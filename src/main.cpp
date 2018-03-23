@@ -18,6 +18,7 @@
 // MQTT topics
 const char* LOG = "/home/log"; // Here we will publish status updates
 const char* LIGHTS = "/home/lights"; // Here we will read commands
+const char[6] QUESTION = "lights?"
 
 // Fill with your data
 const char* ssid = "............";
@@ -37,6 +38,7 @@ int pinStatus = 0;
 void setupWifi();
 void reconnect();
 void handler(char* topic, byte* payload, unsigned int length);
+bool compareStringArrays(byte* respuesta, char* cadena);
 
 /* ------------------------------- Program ------------------------------- */
 
@@ -100,12 +102,32 @@ void reconnect() {
 void handler(char* topic, byte* payload, unsigned int length){
 
   // Update the output pin status and posting on node topic
-  if(strcmp(topic, LIGHTS) == 0)  // Validation in case we subscribe multiple topics
+  if(strcmp(topic, LIGHTS) == 0){  // Validation in case we subscribe multiple topics
     if ((char)payload[0] == '0' && digitalRead(outputPin)){
       digitalWrite(outputPin, LOW);
-      client.publish(LOG, "Turning ligths off");
+      client.publish(LOG, "");
     }else if((char)payload[0] == '1' && !digitalRead(outputPin)){
       digitalWrite(outputPin, HIGH);
       client.publish(LOG, "Turning ligths on");
     }
+
+    // If someone ask for lights status
+    if(compareStringArrays(payload, QUESTION, 6)){
+      if(digitalRead(outputPin) == true)
+        client.publish(LIGHTS, "Status: 1";
+      else
+        client.publish(LIGHTS, "Status: 0";
+    }
+  }
+}
+
+// Todo can fail because of length function
+bool compareStringArrays(byte* respuesta, char[] cadena){
+  bool comparation = true;
+  int i = 0;
+  while( i < strlen(cadena) && comparation == true){
+    if((char)respuesta[i] != cadena[i])
+      comparation = false;
+  }
+  return comparation;
 }
